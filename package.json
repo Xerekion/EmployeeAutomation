@@ -9,6 +9,8 @@
   "author": "Lukas Parescius",
   "license": "MIT",
   "dependencies": {
-    "selenium-webdriver": "^4.0.0-alpha.7"
+    "selenium-webdriver": "^4.0.0-alpha.7",
+    "xls-to-json": "^0.5.4",
+    "xlsx": "^0.16.3"
   }
 }
