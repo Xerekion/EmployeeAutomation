@@ -14,23 +14,26 @@ var wb = xlsx.readFile("EmployeeData.xls",{type:'binary', cellDates:true, cellNF
 var ws = wb.Sheets["Sheet1"]
 
 var data = xlsx.utils.sheet_to_json(ws, {defval: " "});
-console.log(data);
-var newData = data.map(function(record){
-    var randomString = "";
-    for(i = 0; i < 9; i++){
-    var randomNum = Math.floor(Math.random() * 127) + 33;
-    var randomChar = String.fromCharCode(randomNum);
-    randomString = randomString + randomChar.toString();
+
+
+
+function GenerateData(){
+    for(u = 0; u < data.length; u++){
+        var randomString = "";
+        for(i = 0; i < 9; i++){
+            var randomNum = Math.floor(Math.random() * 127) + 33;
+            var randomChar = String.fromCharCode(randomNum);
+            randomString = randomString + randomChar.toString();
+        }
+        data[u].Username = data[u].First_Name + randomString;
     }
-    record.Username = record.First_Name + randomString;
-    //record.Username = record.First_Name + record.First_Name + record.Last_Name;
-    return record;
-});
+}
+GenerateData();
 
-
+console.log(data)
 //var newWB = xlsx.utils.book_new();
 
-wb.Sheets["Sheet1"] = xlsx.utils.json_to_sheet(newData);
+wb.Sheets["Sheet1"] = xlsx.utils.json_to_sheet(data);
 //xlsx.utils.book_append_sheet(wb,newWS);
 //console.log(wb.Sheets["Sheet1"]);
 xlsx.writeFile(wb,"EmployeeData.xls",{cellDates:true});
