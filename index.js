@@ -9,25 +9,31 @@ options.setUserPreferences({"safebrowsing.enabled": true});
 options.addArguments('--test-type', '--start-maximized');
 
 var xlsx = require('xlsx');
-var wb = xlsx.readFile("EmployeeData.xls",{cellDates:true});
+var wb = xlsx.readFile("EmployeeData.xls",{type:'binary', cellDates:true, cellNF: false, cellText:false});
 
 var ws = wb.Sheets["Sheet1"]
 
 var data = xlsx.utils.sheet_to_json(ws, {defval: " "});
-
+console.log(data);
 var newData = data.map(function(record){
-    var randomNum = Math.floor(Math.random() * 10);
-    record.Username = record.First_Name + randomNum.toString();
-    
+    var randomString = "";
+    for(i = 0; i < 9; i++){
+    var randomNum = Math.floor(Math.random() * 127) + 33;
+    var randomChar = String.fromCharCode(randomNum);
+    randomString = randomString + randomChar.toString();
+    }
+    record.Username = record.First_Name + randomString;
+    //record.Username = record.First_Name + record.First_Name + record.Last_Name;
     return record;
 });
-//console.log(newData);
 
-var newWB = xlsx.utils.book_new();
-var newWS = xlsx.utils.json_to_sheet(newData);
-xlsx.utils.book_append_sheet(newWB,newWS,"New Data");
 
-xlsx.writeFile(newWB,"New Data File.xls",{cellDates:true});
+//var newWB = xlsx.utils.book_new();
+
+wb.Sheets["Sheet1"] = xlsx.utils.json_to_sheet(newData);
+//xlsx.utils.book_append_sheet(wb,newWS);
+//console.log(wb.Sheets["Sheet1"]);
+xlsx.writeFile(wb,"EmployeeData.xls",{cellDates:true});
 
 //const driver = new Builder().forBrowser('chrome').setChromeOptions(options).build();
 //async function login(){
