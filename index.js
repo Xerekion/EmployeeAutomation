@@ -56,12 +56,21 @@ wb.Sheets["Sheet1"] = xlsx.utils.json_to_sheet(data);
 //console.log(wb.Sheets["Sheet1"]);
 xlsx.writeFile(wb,"EmployeeData.xls",{cellDates:true});
 
-//const driver = new Builder().forBrowser('chrome').setChromeOptions(options).build();
-//async function login(){
-//await driver.get('https://opensource-demo.orangehrmlive.com');
-//await driver.findElement(By.name("txtUsername")).sendKeys("Admin");
-//await driver.findElement(By.name("txtPassword")).sendKeys("admin123", Key.RETURN);
-//await driver.get('https://opensource-demo.orangehrmlive.com/index.php/pim/addEmployee');
-//await driver.findElement(By.name("chkLogin")).click();
-//}
-//login();
+const driver = new Builder().forBrowser('chrome').setChromeOptions(options).build();
+async function login(){
+    await driver.get('https://opensource-demo.orangehrmlive.com');
+    await driver.findElement(By.name("txtUsername")).sendKeys("Admin");
+    await driver.findElement(By.name("txtPassword")).sendKeys("admin123", Key.RETURN);
+    for(u = 0; u < data.length; u++){
+        await driver.get('https://opensource-demo.orangehrmlive.com/index.php/pim/addEmployee');
+        await driver.findElement(By.name("chkLogin")).click();
+        await driver.findElement(By.name("firstName")).sendKeys(data[u].First_Name);
+        await driver.findElement(By.name("lastName")).sendKeys(data[u].Last_Name);
+        await driver.findElement(By.name("user_name")).sendKeys(data[u].Username);
+        await driver.findElement(By.name("user_password")).sendKeys(data[u].Password);
+        await driver.findElement(By.name("re_password")).sendKeys(data[u].Password);
+        data[u].Employee_id = await driver.findElement(By.name("employeeId")).getAttribute("value");
+        await driver.findElement(By.xpath("/html/body/div[1]/div[3]/div/div[2]/form/fieldset/p/input")).click();
+    }
+}
+login();
