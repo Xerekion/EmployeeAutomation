@@ -17,18 +17,36 @@ var data = xlsx.utils.sheet_to_json(ws, {defval: " "});
 
 
 
-function GenerateData(){
+
+function GenerateLoginData(){
     for(u = 0; u < data.length; u++){
+
         var randomString = "";
-        for(i = 0; i < 9; i++){
-            var randomNum = Math.floor(Math.random() * 127) + 33;
-            var randomChar = String.fromCharCode(randomNum);
-            randomString = randomString + randomChar.toString();
+        if(data[u].Username == " " || undefined){
+            for(i = 0; i < 5; i++){
+                var randomNum = Math.floor(Math.random() * 10);
+                //var randomChar = String.fromCharCode(randomNum);
+                randomString = randomString + randomNum.toString();
+            }
+            data[u].Username = data[u].First_Name + randomString;
+            randomString = "";
         }
-        data[u].Username = data[u].First_Name + randomString;
+        if(data[u].Password == " " || undefined){
+            for(i = 0; i < 5; i++){
+                var randomNum = Math.floor(Math.random() * 10);
+                //var randomChar = String.fromCharCode(randomNum);
+                randomString = randomString + randomNum.toString();
+            }
+            for(i = 0; i < 3; i++){
+                var randomNum = Math.floor(Math.random() * 15) + 33;
+                var randomChar = String.fromCharCode(randomNum);
+                randomString = randomString + randomChar.toString();
+            }
+            data[u].Password = data[u].Last_Name + randomString;
+        }
     }
 }
-GenerateData();
+GenerateLoginData();
 
 console.log(data)
 //var newWB = xlsx.utils.book_new();
